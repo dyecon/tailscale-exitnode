@@ -6,10 +6,11 @@ Tested on Ubuntu 24.04, but should work on other Debian-based systems.
 ---
 
 ## Instructions
-1. Run the following commands in your terminal:
-    ```
-    curl -o setup.sh https://raw.githubusercontent.com/dyecon/tailscale-exitnode/refs/heads/main/setup.sh
-    chmod +x setup.sh
-    ./setup.sh
-    ```
-2. Go to your Tailscale admin page, find the settings for your server, and enable `Use as exit node`.
+1. Create a Tailscale auth key (copy the auth key - you'll need it later).
+1. Download the setup script:
+`curl -o setup.sh https://raw.githubusercontent.com/dyecon/tailscale-exitnode/refs/heads/main/setup.sh`
+1. Allow executing the file:
+`chmod +x setup.sh`
+1. Run the setup script:
+`./setup.sh`
+1. Go to your Tailscale admin page, find the settings for your server, and enable `Use as exit node`.
