@@ -2,10 +2,19 @@
 # Update the system, install Tailscale, and configure as exit node
 # Designed for Ubuntu 24.04, but should work on other Debian-based systems
 
+# Run the 3 lines below to run:
+# curl -o setup.sh https://raw.githubusercontent.com/dyecon/tailscale-exitnode/refs/heads/main/setup.sh
+# chmod +x setup.sh
+# ./setup.sh
+
+
 set -e  # Exit immediately if a command fails
 
 # Prompt for Tailscale auth key
 read -rp "Enter your Tailscale auth key: " TS_AUTH_KEY
+
+# Prompt for Node Name 
+read -rp "Enter node name (leave blank to use deault): " NODE_NAME
 
 if [ -z "$TS_AUTH_KEY" ]; then
     echo "[!] No auth key provided. Exiting."
@@ -35,10 +44,14 @@ echo 'net.ipv4.ip_forward = 1' | sudo tee -a /etc/sysctl.d/99-tailscale.conf
 echo 'net.ipv6.conf.all.forwarding = 1' | sudo tee -a /etc/sysctl.d/99-tailscale.conf
 sudo sysctl -p /etc/sysctl.d/99-tailscale.conf
 
-echo "[*] Configuring Tailscale as exit node..."
-sudo tailscale set --advertise-exit-node
+echo "[*] Setting Node Name..."
+if [ -z "$NODE_NAME" ]; then
+    echo "Using default node name."
+else   
+    sudo tailscale set --hostname="$NODE_NAME"
+fi
 
 echo "[*] Bringing up Tailscale with provided auth key..."
-sudo tailscale up --auth-key="$TS_AUTH_KEY"
+sudo tailscale up --auth-key="$TS_AUTH_KEY" --advertise-exit-node
 
 echo "[✓] Setup complete! This node should now be available as an exit node."
