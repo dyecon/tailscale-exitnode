@@ -6,7 +6,7 @@ Tested on Ubuntu 24.04, but should work on other Debian-based systems.
 ---
 
 ## Instructions
-1. Run the following command in your terminal:
+1. Run the following commands in your terminal:
     ```
     curl -o setup.sh https://raw.githubusercontent.com/dyecon/tailscale-exitnode/refs/heads/main/setup.sh
     chmod +x setup.sh
