@@ -44,14 +44,14 @@ echo 'net.ipv4.ip_forward = 1' | sudo tee -a /etc/sysctl.d/99-tailscale.conf
 echo 'net.ipv6.conf.all.forwarding = 1' | sudo tee -a /etc/sysctl.d/99-tailscale.conf
 sudo sysctl -p /etc/sysctl.d/99-tailscale.conf
 
+echo "[*] Bringing up Tailscale with provided auth key..."
+sudo tailscale up --auth-key=$TS_AUTH_KEY --advertise-exit-node
+
 if [ -z "$NODE_NAME" ]; then
     echo "Using default node name since none was specified..."
 else
     echo "Setting node name to $NODE_NAME..."
-    sudo tailscale set --hostname="$NODE_NAME"
+    sudo tailscale set --hostname=$NODE_NAME
 fi
-
-echo "[*] Bringing up Tailscale with provided auth key..."
-sudo tailscale up --auth-key="$TS_AUTH_KEY" --advertise-exit-node
 
 echo "[✓] Setup complete! This node should now be available as an exit node."
