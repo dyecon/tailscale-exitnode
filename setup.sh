@@ -14,7 +14,7 @@ set -e  # Exit immediately if a command fails
 read -rp "Enter your Tailscale auth key: " TS_AUTH_KEY
 
 # Prompt for Node Name 
-read -rp "Enter node name (leave blank to use deault): " NODE_NAME
+read -rp "Enter node name (leave blank to use default): " NODE_NAME
 
 if [ -z "$TS_AUTH_KEY" ]; then
     echo "[!] No auth key provided. Exiting."
