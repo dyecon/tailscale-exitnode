@@ -44,16 +44,6 @@ echo 'net.ipv4.ip_forward = 1' | sudo tee -a /etc/sysctl.d/99-tailscale.conf
 echo 'net.ipv6.conf.all.forwarding = 1' | sudo tee -a /etc/sysctl.d/99-tailscale.conf
 sudo sysctl -p /etc/sysctl.d/99-tailscale.conf
 
-echo "[*] Bringing up Tailscale with provided auth key..."
-sudo tailscale up --auth-key=$TS_AUTH_KEY --advertise-exit-node
-
-if [ -z "$NODE_NAME" ]; then
-    echo "Using default node name since none was specified..."
-else
-    echo "Setting node name to $NODE_NAME..."
-    sudo tailscale set --hostname=$NODE_NAME
-fi
-
 # Optimize UDP performance
 # See the following link for details:
 # https://tailscale.com/kb/1320/performance-best-practices#linux-optimizations-for-subnet-routers-and-exit-nodes
@@ -64,6 +54,16 @@ printf '#!/bin/sh\n\nethtool -K %s rx-udp-gro-forwarding on rx-gro-list off \n' 
 sudo chmod 755 /etc/networkd-dispatcher/routable.d/50-tailscale
 sudo /etc/networkd-dispatcher/routable.d/50-tailscale
 test $? -eq 0 || echo "An error occurred while optimizing UDP performance."
+
+echo "[*] Bringing up Tailscale with provided auth key..."
+sudo tailscale up --auth-key=$TS_AUTH_KEY --advertise-exit-node
+
+if [ -z "$NODE_NAME" ]; then
+    echo "Using default node name since none was specified..."
+else
+    echo "Setting node name to $NODE_NAME..."
+    sudo tailscale set --hostname=$NODE_NAME
+fi
 
 echo 
 echo "[✓] Setup complete! This node should now be available as an exit node."
